@@ -1,11 +1,24 @@
 package com.springboot.mini.project.restfulwebservices.model;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
 import java.util.Date;
+import java.util.List;
 
+//@JsonFilter("UserFilter")
+@Entity
+@JsonIgnoreProperties(ignoreUnknown=true)
 public class User {
 
+    @Id
+    @GeneratedValue
     private Integer id;
 
     @Size(min = 2, message = "Name should have atleast 2 characters")
@@ -14,10 +27,10 @@ public class User {
     @Past
     private Date birthday;
 
-    protected User()
-    {
+    @OneToMany(mappedBy = "user")
+    private List<Post> posts;
 
-    }
+    protected User() {}
 
     public User(Integer id, String name, Date birthday) {
         this.id = id;
@@ -47,6 +60,14 @@ public class User {
 
     public void setBirthday(Date birthday) {
         this.birthday = birthday;
+    }
+
+    public List<Post> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
     }
 
     @Override
